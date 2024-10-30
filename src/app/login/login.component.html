@@ -1,0 +1,41 @@
+<section class="section">
+    <div class="container is-flex is-align-items-center is-justify-content-center" style="height: 100vh;">
+      <div class="box" style="width: 40%;">
+        <h1 class="title has-text-centered">{{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}</h1>
+        <form (submit)="submit()">
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input class="input" type="email" [(ngModel)]="email" name="email" placeholder="e.g. alex@example.com" required>
+            </div>
+          </div>
+  
+          <div class="field">
+            <label class="label">Contraseña</label>
+            <div class="control">
+              <input class="input" type="password" [(ngModel)]="password" name="password" placeholder="*****" required>
+              <p *ngIf="!isLoginMode && password.length < 6" class="help is-danger">La contraseña debe tener al menos 6 caracteres.</p>
+            </div>
+          </div>
+  
+          <div class="field" *ngIf="!isLoginMode">
+            <label class="label">Confirmar Contraseña</label>
+            <div class="control">
+              <input class="input" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="*****" required>
+              <p *ngIf="password !== confirmPassword && confirmPassword.length > 0" class="help is-danger">Las contraseñas no coinciden.</p>
+            </div>
+          </div>
+  
+          <div class="control has-text-centered">
+            <button class="button is-primary" type="submit"> {{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }} </button>
+          </div>
+  
+          <p class="help has-text-centered" *ngIf="message">{{ message }}</p>
+          <p class="has-text-centered">
+            <a  class="custom-link" (click)="toggleMode()">{{ isLoginMode ? '¿No estás registrado? Únete y regístrate' : 'Ya estás registrado, inicia sesión' }}</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+  
