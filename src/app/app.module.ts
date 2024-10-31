@@ -9,6 +9,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 // Componentes
 import { LoginComponent } from './login/login.component'; 
 import { ProfileComponent } from './profile/profile.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 // Firebase Modules
 import { AngularFireModule } from '@angular/fire/compat';  // Para integrar Firebase
@@ -17,12 +19,16 @@ import { environment } from '../environments/environment';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; 
 import { AdminComponent } from './admin/admin.component';  // Tu configuración de Firebase
 
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,   // Declara el LoginComponent aquí
     ProfileComponent,
-     AdminComponent  // Declara el ProfileComponent aquí
+    AdminComponent ,
+    
+    
+     // Declara el ProfileComponent aquí
   ],
   imports: [
     BrowserModule,
@@ -33,6 +39,7 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     AngularFireAuthModule,
     AngularFirestoreModule,  // Módulo de autenticación de Firebase
     AngularFireStorageModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]  // El componente raíz que se carga primero

@@ -28,9 +28,11 @@
               "src/styles.css",
               "node_modules/bulma/css/bulma.css",
               "node_modules/leaflet/dist/leaflet.css"
-              
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "leaflet"
+            ]
           },
           "configurations": {
             "production": {
@@ -63,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "mi-proyecto:build:production"
+              "buildTarget": "mi-proyecto:build:production"
             },
             "development": {
-              "browserTarget": "mi-proyecto:build:development"
+              "buildTarget": "mi-proyecto:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mi-proyecto:build"
+            "buildTarget": "mi-proyecto:build"
           }
         },
         "test": {
@@ -91,7 +93,10 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/leaflet/dist/leaflet.css"
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/bulma/css/bulma.css"
+
             ],
             "scripts": []
           }
