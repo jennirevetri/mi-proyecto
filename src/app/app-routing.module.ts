@@ -10,9 +10,10 @@ import { ProfileComponent } from './profile/profile.component';
 
 // Definir las rutas
 const routes: Routes = [
-  { path: '', component: LandingPageComponent },  // Redirigir a /login si el path está vacío
+  { path: '', redirectTo: '/landing-page', pathMatch: 'full'  },  // Redirigir a /login si el path está vacío
   { path: 'login', component: LoginComponent },  // Ruta para la página de login
   { path: 'admin', component: AdminComponent},
+  { path: 'landing-page', component: LandingPageComponent },
   { path: 'profile', component: ProfileComponent }  // Ruta para la página de perfil
 ];
 

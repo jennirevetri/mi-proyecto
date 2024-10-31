@@ -12,6 +12,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
+
 // Firebase Modules
 import { AngularFireModule } from '@angular/fire/compat';  // Para integrar Firebase
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';  // Para autenticación
@@ -22,8 +23,7 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,   // Declara el LoginComponent aquí
+    AppComponent,   // Declara el LoginComponent aquí
     ProfileComponent,
     AdminComponent ,
     
@@ -31,6 +31,7 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
      // Declara el ProfileComponent aquí
   ],
   imports: [
+    LoginComponent,
     BrowserModule,
     AppRoutingModule,  // Importa el AppRoutingModule para el enrutamiento
     ReactiveFormsModule,

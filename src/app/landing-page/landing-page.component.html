@@ -1,10 +1,57 @@
-<!-- src/app/landing-page/landing-page.component.html -->
 <app-header></app-header>
 
 <section class="section">
-  <div class="container">
+  <div class="container has-text-centered"> <!-- Añadir has-text-centered para centrar el texto -->
     <h1 class="title">Welcome to Our Landing Page</h1>
     <p class="subtitle">This is a short description of what we do.</p>
+
+    <!-- Carrusel de fotos -->
+    <div class="carousel">
+      <div class="carousel-item" *ngFor="let image of images; let i = index" [ngClass]="{'active': i === currentIndex}">
+        <img [src]="image.src" [alt]="image.alt" class="image is-fullwidth">
+      </div>
+      <div class="buttons has-addons">
+        <button class="button" (click)="prev()">Anterior</button>
+        <button class="button" (click)="next()">Siguiente</button>
+      </div>
+    </div>
+
+    <div class="columns is-multiline">
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-content">
+            <h2 class="subtitle">Tarjeta 1</h2>
+            <p>Descripción breve de lo que ofrece esta tarjeta. Incluye información relevante y atractiva.</p>
+          </div>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">Leer más</a>
+          </footer>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-content">
+            <h2 class="subtitle">Tarjeta 2</h2>
+            <p>Descripción breve de lo que ofrece esta tarjeta. Incluye información relevante y atractiva.</p>
+          </div>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">Leer más</a>
+          </footer>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-content">
+            <h2 class="subtitle">Tarjeta 3</h2>
+            <p>Descripción breve de lo que ofrece esta tarjeta. Incluye información relevante y atractiva.</p>
+          </div>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">Leer más</a>
+          </footer>
+        </div>
+      </div>
+    </div>
+
     <!-- Aquí puedes añadir más contenido para tu landing page -->
   </div>
 </section>
