@@ -1,0 +1,29 @@
+.container {
+    margin-top: 20px;
+  }
+  
+  .preview, .form-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .file-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .file-item button {
+    background-color: #f14668;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  #imagePreview img, #videoPreview video {
+    max-width: 200px;
+    max-height: 200px;
+  }
+  

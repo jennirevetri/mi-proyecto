@@ -1,0 +1,58 @@
+/* Estilo para el contenedor principal */
+.container {
+    display: flex; /* Utiliza Flexbox */
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    align-items: center; /* Centra los elementos en el eje horizontal */
+    min-height: 100vh; /* Permite que el contenedor crezca */
+    padding: 20px; /* Añade espacio interno */
+}
+
+/* Estilo para el mapa */
+#map {
+    height: 400px; /* Altura del mapa */
+    width: 100%; /* Ocupa todo el ancho */
+    margin-bottom: 20px; /* Espacio debajo del mapa */
+}
+
+/* Estilo para la vista previa de la imagen */
+.image-preview {
+    max-width: 150px; /* Ancho máximo de la imagen */
+    max-height: 150px; /* Altura máxima de la imagen */
+    border-radius: 50%; /* Esquinas redondeadas para la imagen */
+    margin-right: 20px; /* Espacio a la derecha de la imagen */
+    margin-bottom: 20px; /* Espacio en la parte inferior de la imagen */
+}
+
+/* Estilo para los grupos de entrada */
+.input-group {
+    display: flex; /* Muestra los elementos en línea */
+    align-items: center; /* Alinea verticalmente los elementos */
+    margin-bottom: 10px; /* Espacio inferior entre los grupos */
+}
+
+/* Estilo del contenedor del formulario */
+.box {
+    padding: 20px; /* Espacio interno del formulario */
+    /* Fondo blanco para el formulario */
+    border-radius: 8px; /* Esquinas redondeadas para el contenedor */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para el contenedor */
+}
+
+/* Estilo para los campos del formulario en columnas */
+.field {
+    display: flex; /* Usar flexbox */
+    flex-direction: row; /* Alinear los elementos en fila */
+    justify-content: space-between; /* Espaciado entre los elementos */
+    margin-bottom: 10px; /* Espacio inferior entre los campos */
+}
+
+/* Campo con un ancho ajustado */
+.field > .control {
+    flex: 1; /* Ocupa el espacio disponible */
+    margin-right: 10px; /* Espacio a la derecha del campo */
+}
+
+/* Para el último campo en cada fila, eliminar el margen derecho */
+.field > .control:last-child {
+    margin-right: 0; /* Sin margen derecho en el último campo */
+}

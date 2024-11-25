@@ -1,118 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Información</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-        }
-        .image-preview {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-        .input-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Formulario de Información</h1>
-    <form (ngSubmit)="saveProfileData()">
-        <fieldset>
-            <legend>Información Personal</legend>
-            <div class="input-group">
-                <img [src]="profileData.picture" class="image-preview" *ngIf="profileData.picture" alt="Profile Picture">
-                <label for="gender">Género:</label>
-                <input type="text" id="gender" name="gender" [(ngModel)]="profileData.gender" required>
-            </div>
+<section class="section">
+    <div class="container is-flex is-align-items-center is-justify-content-center">
+        <div class="box" style="width: 60%;">
+            <h1 class="title has-text-centered">Formulario de Información</h1>
+            <form (ngSubmit)="saveProfileData()">
 
-            <div class="input-group">
-                <label for="first-name">Nombre:</label>
-                <input type="text" id="first-name" name="first-name" [(ngModel)]="profileData.firstName" required>
-            </div>
+                
+                <fieldset>
+                    <legend>Información Personal</legend>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="email">Correo Electrónico:</label>
+                            <input class="input" type="email" id="email" name="email" [(ngModel)]="profileData.email"  readonly>
+                        </div>
+                        <div class="control">
+                            <label class="label" for="phone">Teléfono:</label>
+                            <input class="input" type="text" id="phone" name="phone" [(ngModel)]="profileData.phone">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control has-text-centered">
+                            <img [src]="profileData.picture" class="image-preview" *ngIf="profileData.picture" alt="Profile Picture">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="gender">Género:</label>
+                            <input class="input" type="text" id="gender" name="gender" [(ngModel)]="profileData.gender" required>
+                        </div>
+                        <div class="control">
+                            <label class="label" for="first-name">Nombre:</label>
+                            <input class="input" type="text" id="first-name" name="first-name" [(ngModel)]="profileData.firstName" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="last-name">Apellido:</label>
+                            <input class="input" type="text" id="last-name" name="last-name" [(ngModel)]="profileData.lastName" required>
+                        </div>
+                        <div class="control">
+                            <label class="label" for="picture">URL de Fotografía:</label>
+                            <input class="input" type="text" id="picture" name="picture" [(ngModel)]="profileData.picture">
+                        </div>
+                    </div>
 
-            <div class="input-group">
-                <label for="last-name">Apellido:</label>
-                <input type="text" id="last-name" name="last-name" [(ngModel)]="profileData.lastName" required>
-            </div>
+                    <legend>Ubicación</legend>
+                    <div id="map" class="mb-4"></div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="street-number">Número de Calle:</label>
+                            <input class="input" type="text" id="street-number" name="street-number" [(ngModel)]="profileData.streetNumber">
+                        </div>
+                        <div class="control">
+                            <label class="label" for="street-name">Nombre de Calle:</label>
+                            <input class="input" type="text" id="street-name" name="street-name" [(ngModel)]="profileData.streetName">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="city">Ciudad:</label>
+                            <input class="input" type="text" id="city" name="city" [(ngModel)]="profileData.city">
+                        </div>
+                        <div class="control">
+                            <label class="label" for="state">Estado:</label>
+                            <input class="input" type="text" id="state" name="state" [(ngModel)]="profileData.state">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="country">País:</label>
+                            <input class="input" type="text" id="country" name="country" [(ngModel)]="profileData.country">
+                        </div>
+                        <div class="control">
+                            <label class="label" for="postcode">Código Postal:</label>
+                            <input class="input" type="text" id="postcode" name="postcode" [(ngModel)]="profileData.postcode">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="latitude">Latitud:</label>
+                            <input class="input" type="text" id="latitude" name="latitude" [(ngModel)]="profileData.latitude" readonly>
+                        </div>
+                        <div class="control">
+                            <label class="label" for="longitude">Longitud:</label>
+                            <input class="input" type="text" id="longitude" name="longitude" [(ngModel)]="profileData.longitude" readonly>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="timezone-offset">Zona Horaria (Desplazamiento):</label>
+                            <input class="input" type="text" id="timezone-offset" name="timezone-offset" [(ngModel)]="profileData.timezoneOffset" readonly>
+                        </div>
+                        <div class="control">
+                            <label class="label" for="timezone-description">Descripción de la Zona Horaria:</label>
+                            <input class="input" type="text" id="timezone-description" name="timezone-description" [(ngModel)]="profileData.timezoneDescription" readonly>
+                        </div>
+                    </div>
+                </fieldset>
 
-            <div class="input-group">
-                <label for="picture">URL de Fotografía:</label>
-                <input type="text" id="picture" name="picture" [(ngModel)]="profileData.picture">
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Ubicación</legend>
-            <div id="map"></div><br>
-
-            <label for="street-number">Número de Calle:</label>
-            <input type="text" id="street-number" name="street-number" [(ngModel)]="profileData.streetNumber"><br><br>
-
-            <label for="street-name">Nombre de Calle:</label>
-            <input type="text" id="street-name" name="street-name" [(ngModel)]="profileData.streetName"><br><br>
-
-            <label for="city">Ciudad:</label>
-            <input type="text" id="city" name="city" [(ngModel)]="profileData.city"><br><br>
-
-            <label for="state">Estado:</label>
-            <input type="text" id="state" name="state" [(ngModel)]="profileData.state"><br><br>
-
-            <label for="country">País:</label>
-            <input type="text" id="country" name="country" [(ngModel)]="profileData.country"><br><br>
-
-            <label for="postcode">Código Postal:</label>
-            <input type="text" id="postcode" name="postcode" [(ngModel)]="profileData.postcode"><br><br>
-
-            <label for="latitude">Latitud:</label>
-            <input type="text" id="latitude" name="latitude" [(ngModel)]="profileData.latitude" readonly><br><br>
-
-            <label for="longitude">Longitud:</label>
-            <input type="text" id="longitude" name="longitude" [(ngModel)]="profileData.longitude" readonly><br><br>
-
-            <label for="timezone-offset">Zona Horaria (Desplazamiento):</label>
-            <input type="text" id="timezone-offset" name="timezone-offset" [(ngModel)]="profileData.timezoneOffset" readonly><br><br>
-
-            <label for="timezone-description">Descripción de la Zona Horaria:</label>
-            <input type="text" id="timezone-description" name="timezone-description" [(ngModel)]="profileData.timezoneDescription" readonly><br><br>
-        </fieldset>
-
-        <fieldset>
-            <legend>Información de Contacto</legend>
-            <label for="email">Correo Electrónico:</label>
-            <input type="email" id="email" name="email" [(ngModel)]="profileData.email" required><br><br>
-
-            <label for="phone">Teléfono:</label>
-            <input type="text" id="phone" name="phone" [(ngModel)]="profileData.phone"><br><br>
-
-            <label for="cell">Celular:</label>
-            <input type="text" id="cell" name="cell" [(ngModel)]="profileData.cell"><br><br>
-
-            <label for="username">Nombre de Usuario:</label>
-            <input type="text" id="username" name="username" [(ngModel)]="profileData.username"><br><br>
-
-            <label for="dob">Fecha de Nacimiento:</label>
-            <input type="date" id="dob" name="dob" [(ngModel)]="profileData.dob" (change)="onDobChange($event)" required><br><br>
-
-            <label for="age">Edad:</label>
-            <input type="text" id="age" name="age" [(ngModel)]="profileData.age" readonly><br><br>
-
-            <label for="nat">Nacionalidad:</label>
-            <input type="text" id="nat" name="nat" [(ngModel)]="profileData.nat"><br><br>
-
-            <label for="registration-date">Fecha de Registro:</label>
-            <input type="text" id="registration-date" name="registration-date" [(ngModel)]="profileData.registrationDate" readonly><br><br>
-        </fieldset>
-
-        <button type="submit">Guardar</button>
-    </form>
-</body>
-</html>
+                
+                <button class="button is-primary" type="submit">Guardar</button>
+            </form>
+        </div>
+    </div>
+</section>

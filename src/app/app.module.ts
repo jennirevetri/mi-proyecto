@@ -5,12 +5,14 @@ import { FormsModule } from '@angular/forms';  // Asegúrate de importar FormsMo
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';  // Para usar formularios reactivos
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore'; 
+import { CommonModule } from '@angular/common';
 
 // Componentes
 import { LoginComponent } from './login/login.component'; 
 import { ProfileComponent } from './profile/profile.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 
 // Firebase Modules
@@ -27,11 +29,17 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     ProfileComponent,
     AdminComponent ,
     
+
+    
+    
+  
+    
     
      // Declara el ProfileComponent aquí
   ],
   imports: [
     LoginComponent,
+    CommonModule,
     BrowserModule,
     AppRoutingModule,  // Importa el AppRoutingModule para el enrutamiento
     ReactiveFormsModule,
@@ -40,6 +48,8 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     AngularFireAuthModule,
     AngularFirestoreModule,  // Módulo de autenticación de Firebase
     AngularFireStorageModule,
+    FileUploadComponent,
+    
     
   ],
   providers: [],
