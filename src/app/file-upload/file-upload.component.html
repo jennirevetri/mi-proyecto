@@ -1,84 +1,156 @@
 <div class="container">
-    <div class="columns">
-      <!-- Formulario al lado derecho -->
-      <div class="column is-half form-column">
-        <h2 class="title is-4">Subir Archivo</h2>
-        <div class="field">
-          <label class="label" for="fileType">Tipo de Archivo:</label>
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select id="fileType" [(ngModel)]="fileType" (change)="toggleWysiwygEditor()">
-                <option value="audio">Audios (máx 3)</option>
-                <option value="image">Imágenes</option>
-                <option value="video">Video</option>
-                <option value="pdf">PDF</option>
-                <option value="wysiwyg">Términos y Condiciones (WYSIWYG)</option>
-                <option value="subtitles">Subtítulos (archivo VTT)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="field">
-          <div class="file is-info">
-            <label class="file-label">
-              <input class="file-input" type="file" id="fileInput" (change)="handleFileUpload($event)" multiple>
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label">Seleccionar archivo(s)</span>
-              </span>
-            </label>
-          </div>
-        </div>
-        <div class="field">
-          <button class="button is-link" (click)="saveFiles()">Subir</button>
-          <button class="button is-primary" (click)="saveFiles()">Guardar</button>
-        </div>
-  
-        <!-- WYSIWYG Editor -->
-        <div class="field" *ngIf="fileType === 'wysiwyg'">
-          <label class="label">Términos y Condiciones</label>
-          <div class="control">
-            <textarea class="textarea" [(ngModel)]="wysiwygText" placeholder="Escribe los términos y condiciones aquí..."></textarea>
+  <div class="columns">
+    <!-- Formulario: Selección y carga de archivos -->
+    <div class="column is-half form-column">
+      <h2 class="title is-4">Subir Archivo</h2>
+
+      <!-- Selector principal de tipo de archivo -->
+      <div class="field">
+        <label class="label" for="fileType">Tipo de Archivo:</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select (change)="updateFileType($event)">
+              <option value="audio">Audio</option>
+              <option value="image">Imagen</option>
+              <option value="video">Video</option>
+              <option value="pdf">PDF</option>
+              <option value="subtitles">Subtítulos</option>
+              <option value="wysiwyg">Términos y Condiciones</option>
+            </select>
           </div>
         </div>
       </div>
-  
-      <!-- Vista previa al lado izquierdo -->
-      <div class="column is-half preview">
-        <h2 class="title is-4">Vista Previa</h2>
-        <div *ngIf="fileType === 'audio'" id="audioPreview">
-          <div *ngFor="let file of audioFiles" class="file-item">
-            <audio controls [src]="file.url"></audio>
-            <span>{{ file.name }}</span>
-            <button (click)="removeFile(file, 'audio')">X</button>
+
+      <!-- Selector adicional para audios -->
+      <div class="field" *ngIf="fileType === 'audio'">
+        <label class="label" for="audioType">Seleccione Transiciones:</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="audioType" [(ngModel)]="audioType">
+              <option value="transition1">Transición 1</option>
+              <option value="transition2">Transición 2</option>
+              <option value="transition3">Transición 3</option>
+            </select>
           </div>
         </div>
-        <div *ngIf="fileType === 'image'" id="imagePreview">
-          <div *ngFor="let file of imageFiles" class="file-item">
-            <img [src]="file.url" alt="Imagen">
-            <p>Dimensiones: {{ file.width }}x{{ file.height }}px, Tamaño: {{ file.size }} bytes</p>
-            <button (click)="removeFile(file, 'image')">X</button>
-          </div>
+      </div>
+
+      <!-- Campo para seleccionar archivos -->
+      <div class="field">
+        <div class="file is-info">
+          <label class="file-label">
+            <input 
+              class="file-input" 
+              type="file" 
+              id="fileInput" 
+              (change)="handleFileUpload($event)" 
+              [multiple]="fileType !== 'wysiwyg' && fileType !== 'subtitles'">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">Seleccionar archivo(s)</span>
+            </span>
+          </label>
         </div>
-        <div *ngIf="fileType === 'video'" id="videoPreview">
-          <div *ngFor="let file of videoFiles" class="file-item">
-            <video controls width="100%" height="500px" [src]="file.url"></video>
-            <p>{{ file.name }}</p>
-            <button (click)="removeFile(file, 'video')">X</button>
-          </div>
-        </div>
-        <div *ngIf="fileType === 'pdf'" id="pdfPreview">
-          <div *ngFor="let file of pdfFiles" class="file-item">
-            <embed [src]="file.url" type="application/pdf" width="100%" height="500px">
-            <button (click)="removeFile(file, 'pdf')">X</button>
-          </div>
-        </div>
-        <div *ngIf="fileType === 'wysiwyg'" id="wysiwygPreview">
-          <p><strong>Términos y Condiciones:</strong> {{ wysiwygText }}</p>
-        </div>
+      </div>
+
+      
+
+      <!-- Editor WYSIWYG -->
+      <div class="field" *ngIf="fileType === 'wysiwyg'">
+        <label class="label">Términos y Condiciones</label>
+        <quill-editor 
+          [(ngModel)]="editorContent" 
+          [modules]="editorConfig"
+          [styles]="{ height: '200px' }">
+        </quill-editor>
+      </div>
+
+      <!-- Botón para guardar archivos -->
+      <div class="field">
+        <button class="button is-primary" (click)="saveFiles()">Guardar</button>
+      </div>
+
+      <div *ngIf="uploadSuccess" class="notification is-success">
+        ¡Archivo cargado con éxito!
+      </div>
+    </div>
+
+    <!-- Vista previa -->
+    <div class="column is-half preview">
+      <h2 class="title is-4">Vista Previa</h2>
+    
+      <!-- Vista previa para audios -->
+      <div *ngIf="fileType === 'audio'">
+        <h3 class="subtitle is-5">Audios Seleccionados ({{ audioType }})</h3>
+        <ul>
+          <li *ngFor="let audio of audioFiles[audioType]">
+            <p><strong>{{ audio.fileName }}</strong></p>
+            <audio controls [src]="audio.fileUrl"></audio>
+            <button class="button is-danger is-small" (click)="removeFile(audio, 'audio', audioType)">Eliminar</button>
+          </li>
+        </ul>
+      </div>
+    
+      <!-- Vista previa para imágenes -->
+      <div *ngIf="fileType === 'image'">
+        <h3 class="subtitle is-5">Imágenes Seleccionadas</h3>
+        <ul>
+          <li *ngFor="let image of imageFiles">
+            <img [src]="image.fileUrl" alt="{{ image.fileName }}" width="150">
+            <p>{{ image.fileName }}</p>
+            <button class="button is-danger is-small" (click)="removeFile(image, 'image')">Eliminar</button>
+          </li>
+        </ul>
+      </div>
+    
+      <!-- Vista previa para videos -->
+      <div *ngIf="fileType === 'video'">
+        <h3 class="subtitle is-5">Videos Seleccionados</h3>
+        <ul>
+          <li *ngFor="let video of videoFiles">
+            <video width="200" controls>
+              <source [src]="video.fileUrl" type="video/mp4">
+              Tu navegador no soporta el formato de video.
+            </video>
+            <p>{{ video.fileName }}</p>
+            <button class="button is-danger is-small" (click)="removeFile(video, 'video')">Eliminar</button>
+          </li>
+        </ul>
+      </div>
+    
+      <!-- Vista previa para PDFs -->
+      <div *ngIf="fileType === 'pdf'">
+        <h3 class="subtitle is-5">Archivos PDF Seleccionados</h3>
+        <ul>
+          <li *ngFor="let pdf of pdfFiles">
+            <p>{{ pdf.fileName }}</p>
+            <a [href]="pdf.fileUrl" target="_blank">Ver PDF</a>
+            <button class="button is-danger is-small" (click)="removeFile(pdf, 'pdf')">Eliminar</button>
+          </li>
+        </ul>
+      </div>
+    
+      <!-- Vista previa para subtítulos -->
+      <div *ngIf="fileType === 'subtitles'">
+        <h3 class="subtitle is-5">Subtítulos Seleccionados</h3>
+        <ul>
+          <li *ngFor="let subtitle of subtitleFiles">
+            <p>{{ subtitle.fileName }}</p>
+            <a [href]="subtitle.fileUrl" target="_blank">Ver Subtítulo</a>
+            <button class="button is-danger is-small" (click)="removeFile(subtitle, 'subtitles')">Eliminar</button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Vista previa para texto WYSIWYG -->
+      <!-- WYSIWYG Preview -->
+      <div *ngIf="fileType === 'wysiwyg'">
+        <h3 class="subtitle is-5">Terms and Conditions</h3>
+        <div class="content" [innerHTML]="wysiwygText"></div>
+        <button class="button is-danger is-small" (click)="removeFile({fileName: 'terms_and_conditions.html', fileUrl: '', fileType: 'wysiwyg'}, 'wysiwyg')">Remove Content</button>
       </div>
     </div>
   </div>
-  
+</div>

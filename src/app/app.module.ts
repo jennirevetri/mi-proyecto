@@ -5,7 +5,10 @@ import { FormsModule } from '@angular/forms';  // Asegúrate de importar FormsMo
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';  // Para usar formularios reactivos
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore'; 
+
 import { CommonModule } from '@angular/common';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular'; 
+import { QuillModule } from 'ngx-quill';  // Importar el módulo Quill
 
 // Componentes
 import { LoginComponent } from './login/login.component'; 
@@ -29,6 +32,7 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     ProfileComponent,
     AdminComponent ,
     
+    
 
     
     
@@ -47,8 +51,23 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     AngularFireModule.initializeApp(environment.firebaseConfig),  // Inicializa Firebase
     AngularFireAuthModule,
     AngularFirestoreModule,  // Módulo de autenticación de Firebase
-    AngularFireStorageModule,
     FileUploadComponent,
+    AngularFireStorageModule,
+    CKEditorModule,
+    QuillModule.forRoot({
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['link', 'image'],
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'font': [] }],
+          [{ 'align': [] }],
+          ['clean']
+        ]
+      }
+    })
+
     
     
   ],

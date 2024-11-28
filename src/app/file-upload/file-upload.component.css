@@ -26,4 +26,26 @@
     max-width: 200px;
     max-height: 200px;
   }
+
   
+  .container {
+    margin-top: 20px;
+  }
+  
+  quill-editor {
+    height: 300px;
+    width: 300px;
+    background-color: white;
+  }
+  
+  
+  /* Asegúrate de que el contenedor del editor tenga altura y ancho adecuados */
+/* Puedes personalizar el estilo del editor aquí */
+.ql-toolbar.ql-snow {
+  border: 1px solid #dbdbdb; /* Color del borde de Bulma */
+}
+
+.ql-container.ql-snow {
+  border: 1px solid #dbdbdb; /* Color del borde de Bulma */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fuente de Bulma */
+}
