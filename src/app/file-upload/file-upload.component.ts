@@ -12,6 +12,10 @@ interface FileData {
   fileType: string;
   audioType?: string;
   textContent?: string; 
+  size?: number; // tamaño en bytes
+  width?: number; // ancho en píxeles (para imágenes y videos)
+  height?: number;
+  duration?: number; // altura en píxeles (para imágenes y videos)
 }
 
 @Component({
@@ -111,80 +115,118 @@ export class FileUploadComponent implements OnInit {
   }
 
   handleFileUpload(event: any) {
-  const file = event.target.files[0];
-  const fileType = this.fileType;
-
-  if (file) {
-    // Validations for audio files
-    if (fileType === 'audio') {
-      const requiredAudioTypes = ['transition1', 'transition2', 'transition3'];
-      const missingTypes = requiredAudioTypes.filter(type => this.audioFiles[type].length === 0);
-      
-      
-
-      if (this.audioFiles[this.audioType].length > 0) {
-        alert(`You must delete the existing audio file for ${this.audioType} before uploading a new one.`);
+    const file = event.target.files[0];
+    const fileType = this.fileType;
+  
+    if (file) {
+      // Validations for audio files
+      if (fileType === 'audio') {
+        const requiredAudioTypes = ['transition1', 'transition2', 'transition3'];
+        const missingTypes = requiredAudioTypes.filter(type => this.audioFiles[type].length === 0);
+        
+        if (this.audioFiles[this.audioType].length > 0) {
+          alert(`You must delete the existing audio file for ${this.audioType} before uploading a new one.`);
+          return;
+        }
+      }
+  
+      // Validations for subtitle files
+      if (fileType === 'subtitles' && this.subtitleFiles.length > 0) {
+        alert('You must delete the existing subtitle file before uploading a new one.');
         return;
       }
-    }
-
-    // Validations for subtitle files
-    if (fileType === 'subtitles' && this.subtitleFiles.length > 0) {
-      alert('You must delete the existing subtitle file before uploading a new one.');
-      return;
-    }
-
-    // Validations for video files
-    if (fileType === 'video' && this.videoFiles.length > 0) {
-      alert('You must delete the existing video file before uploading a new one.');
-      return;
-    }
-
-    // Validations for PDF files
-    if (fileType === 'pdf' && this.pdfFiles.length > 0) {
-      alert('You must delete the existing PDF file before uploading a new one.');
-      return;
-    }
-
-    // Validations for WYSIWYG content
-    if (fileType === 'wysiwyg' && this.allFiles.some(f => f.fileType === 'wysiwyg')) {
-      alert('You must delete the existing WYSIWYG content before uploading a new one.');
-      return;
-    }
-
-    // Validations for image files
-    if (fileType === 'image') {
-      if (this.imageFiles.length === 0) {
-        alert('You must upload at least one image.');
-      } else if (this.imageFiles.length >= 3) {
-        alert('You can upload a maximum of 3 images. Please delete an existing image before uploading a new one.');
+  
+      // Validations for video files
+      if (fileType === 'video' && this.videoFiles.length > 0) {
+        alert('You must delete the existing video file before uploading a new one.');
         return;
       }
+  
+      // Validations for PDF files
+      if (fileType === 'pdf' && this.pdfFiles.length > 0) {
+        alert('You must delete the existing PDF file before uploading a new one.');
+        return;
+      }
+  
+      // Validations for WYSIWYG content
+      if (fileType === 'wysiwyg' && this.allFiles.some(f => f.fileType === 'wysiwyg')) {
+        alert('You must delete the existing WYSIWYG content before uploading a new one.');
+        return;
+      }
+  
+      // Validations for image files
+      if (fileType === 'image') {
+        if (this.imageFiles.length === 0) {
+          alert('You must upload at least one image.');
+        } else if (this.imageFiles.length >= 3) {
+          alert('You can upload a maximum of 3 images. Please delete an existing image before uploading a new one.');
+          return;
+        }
+      }
+  
+      const filePath = `${fileType}/${new Date().getTime()}_${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, file);
+  
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          fileRef.getDownloadURL().subscribe(url => {
+            if (fileType === 'image' || fileType === 'video') {
+              const fileReader = new FileReader();
+              fileReader.onload = (e: any) => {
+                if (fileType === 'image') {
+                  const img = new Image();
+                  img.onload = () => {
+                    const width = img.width;
+                    const height = img.height;
+                    this.saveFileData(file, fileType, url, file.size, width, height);
+                  };
+                  img.src = e.target.result;
+                } else if (fileType === 'video') {
+                  const video = document.createElement('video');
+                  video.onloadedmetadata = () => {
+                    const width = video.videoWidth;
+                    const height = video.videoHeight;
+                    const duration = video.duration;
+                    this.saveFileData(file, fileType, url, file.size, width, height, duration);
+                  };
+                  video.src = URL.createObjectURL(file);
+                }
+              };
+              fileReader.readAsDataURL(file);
+            } else {
+              this.saveFileData(file, fileType, url, file.size);
+            }
+            this.uploadSuccess = true;
+            setTimeout(() => this.uploadSuccess = false, 3000);
+          });
+        })
+      ).subscribe();
     }
-
-    const filePath = `${fileType}/${new Date().getTime()}_${file.name}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-
-    task.snapshotChanges().pipe(
-      finalize(() => {
-        fileRef.getDownloadURL().subscribe(url => {
-          this.saveFileData(file, fileType, url);
-          this.uploadSuccess = true;
-          setTimeout(() => this.uploadSuccess = false, 3000);
-        });
-      })
-    ).subscribe();
   }
-}
-
-  saveFileData(file: any, fileType: string, fileUrl: string) {
+  
+  saveFileData(file: any, fileType: string, fileUrl: string, fileSize: number, width?: number, height?: number, duration?: number) {
+    // Crear un objeto de datos básico para todos los archivos
     const fileData: FileData = {
       fileName: file.name,
       fileUrl: fileUrl,
-      fileType: fileType
+      fileType: fileType,
+      size: fileSize,
     };
-
+  
+    // Solo agregar estos campos si tienen un valor definido y si son relevantes para el tipo de archivo
+    if ((fileType === 'image' || fileType === 'video') && width !== undefined && height !== undefined) {
+      // Se agregan width y height tanto para imágenes como para videos
+      fileData.width = width;
+      fileData.height = height;
+    }
+  
+    if ((fileType === 'audio' || fileType === 'video') && duration !== undefined) {
+      // Solo se agrega duration para archivos de tipo audio o video
+      fileData.duration = duration;
+    }
+  
+    // Aquí mantenemos la lógica para agregar el archivo a los arrays locales antes de guardarlo en Firestore
     if (fileType === 'audio' && !this.audioFiles[this.audioType].some(f => f.fileName === fileData.fileName)) {
       this.audioFiles[this.audioType].push(fileData);
     } else if (fileType === 'image' && !this.imageFiles.some(f => f.fileName === fileData.fileName)) {
@@ -198,14 +240,20 @@ export class FileUploadComponent implements OnInit {
     } else if (fileType === 'wysiwyg' && !this.allFiles.some(f => f.fileName === fileData.fileName)) {
       this.allFiles.push(fileData);
     }
-
-    this.firestore.collection('files').add(fileData);
+  
+    // Ahora agregamos el archivo a Firestore
+    this.firestore.collection('files').add(fileData).then(() => {
+      console.log('Archivo guardado correctamente en Firestore');
+    }).catch(error => {
+      console.error('Error guardando el archivo en Firestore:', error);
+    });
   }
+  
+  
 
   removeFile(file: FileData, fileType: string, audioType?: string) {
     if (fileType === 'wysiwyg') {
       // For WYSIWYG, we'll clear the content and remove it from Firestore
-      
       this.wysiwygText = '';
       this.firestore.collection('files').ref.where('fileType', '==', 'wysiwyg').get().then(snapshot => {
         snapshot.forEach(doc => doc.ref.delete());

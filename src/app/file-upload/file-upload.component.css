@@ -14,18 +14,9 @@
     margin-bottom: 10px;
   }
   
-  .file-item button {
-    background-color: #f14668;
-    color: white;
-    border: none;
-    margin-left: 10px;
-    cursor: pointer;
-  }
   
-  #imagePreview img, #videoPreview video {
-    max-width: 200px;
-    max-height: 200px;
-  }
+  
+  
 
   
   .container {
@@ -48,4 +39,9 @@
 .ql-container.ql-snow {
   border: 1px solid #dbdbdb; /* Color del borde de Bulma */
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fuente de Bulma */
+}
+
+.thumbnail {
+  width: 400px; /* Ancho de la miniatura */
+   /* Altura máxima de la miniatura */
 }
