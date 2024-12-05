@@ -28,13 +28,13 @@
             <div class="column">
               <label class="label">Color Primario</label>
               <div class="control">
-                <input class="input" type="color" formControlName="colorTitulo">
+                <input class="input" type="color" formControlName="colorPrimario">
               </div>
             </div>
             <div class="column">
               <label class="label">Color Secundario</label>
               <div class="control">
-                <input class="input" type="color" formControlName="colorSubtitulo">
+                <input class="input" type="color" formControlName="colorSecundario">
               </div>
             </div>
           </div>
@@ -56,34 +56,36 @@
               <label class="file-label">
                 <input class="file-input" type="file" (change)="cargarArchivo($event, 'fuentePrincipal')" name="fuentePrincipal" />
                 <span class="file-cta">
-                  
+
                   <span class="file-label">Seleccionar archivo</span>
                 </span>
                 <span class="file-name" *ngIf="nombreArchivoFuentePrincipal">{{ nombreArchivoFuentePrincipal }}</span>
               </label>
             </div>
           </div>
-  
+
           <div class="field">
             <label class="label">Fuente Secundaria</label>
             <div class="file is-small has-name">
               <label class="file-label">
                 <input class="file-input" type="file" (change)="cargarArchivo($event, 'fuenteSecundaria')" name="fuenteSecundaria" />
                 <span class="file-cta">
-                  
+
                   <span class="file-label">Seleccionar archivo</span>
                 </span>
                 <span class="file-name" *ngIf="nombreArchivoFuenteSecundaria">{{ nombreArchivoFuenteSecundaria }}</span>
               </label>
             </div>
           </div>
-        
+
 
         <!-- Botones de guardar y restablecer -->
         <div class="field">
           <div class="control">
-            <button class="button is-primary" type="submit">Guardar Cambios</button>
-            <button class="button is-warning" type="button" (click)="restablecerPredeterminado()">
+            <button type="submit" class="save-button is-primary">
+              Guardar Cambios
+            </button>
+            <button type="button" class="reset-button" (click)="restablecerPredeterminado()">
               Restablecer a valores predeterminados
             </button>
           </div>

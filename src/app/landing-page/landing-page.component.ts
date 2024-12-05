@@ -3,6 +3,7 @@ import { FileService, FileData } from '../file.service';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-landing-page',
@@ -14,10 +15,17 @@ import { CommonModule } from '@angular/common';
 export class LandingPageComponent implements OnInit {
   images: FileData[] = [];
   videos: FileData[] = [];
+<<<<<<< HEAD
   subtitles: FileData[] = [];
+=======
+  subtitles: (FileData & { safeUrl: SafeResourceUrl })[] = [];
+>>>>>>> changes
   currentIndex: number = 3;
 
-  constructor(private fileService: FileService) {}
+  constructor(
+    private fileService: FileService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     // Cargar imágenes
@@ -34,7 +42,14 @@ export class LandingPageComponent implements OnInit {
 
     // Cargar subtítulos
     this.fileService.getFilesByType('subtitles').subscribe(files => {
+<<<<<<< HEAD
       this.subtitles = files;
+=======
+      this.subtitles = files.map(file => ({
+        ...file,
+        safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(file.fileUrl)
+      }));
+>>>>>>> changes
     });
   }
 

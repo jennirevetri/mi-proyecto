@@ -39,6 +39,8 @@ export class FileUploadComponent implements OnInit {
   pdfFiles: FileData[] = [];
   subtitleFiles: FileData[] = [];
   allFiles: FileData[] = [];
+  subtitles: (FileData & { safeUrl: SafeResourceUrl })[] = [];
+  estilos: any;
 
   editorConfig = {
     theme: 'snow',
@@ -65,6 +67,8 @@ export class FileUploadComponent implements OnInit {
   ngOnInit(): void {
     this.loadFilesFromFirestore();
     this.loadWysiwygContent();
+    this.loadEstilos();
+    this.loadSubtitles();
   }
 
   loadWysiwygContent() {
@@ -125,10 +129,50 @@ export class FileUploadComponent implements OnInit {
     const fileType = this.fileType;
 
     if (file) {
-      // Validations for audio files
-      if (fileType === 'audio') {
-        const requiredAudioTypes = ['transition1', 'transition2', 'transition3'];
-        const missingTypes = requiredAudioTypes.filter(type => this.audioFiles[type].length === 0);
+      // Validación específica para archivos de subtítulos
+      if (fileType === 'subtitles') {
+        // Verificar la extensión del archivo
+        if (!file.name.toLowerCase().endsWith('.vtt') && !file.name.toLowerCase().endsWith('.srt')) {
+          alert('El archivo de subtítulos debe estar en formato .vtt o .srt');
+          return;
+        }
+
+        // Convertir a VTT si es necesario (si es SRT)
+        if (file.name.toLowerCase().endsWith('.srt')) {
+          // Aquí podrías agregar lógica para convertir SRT a VTT si es necesario
+          console.log('Se recomienda usar formato VTT para los subtítulos');
+        }
+      }
+
+      const filePath = `${fileType}/${new Date().getTime()}_${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, file);
+
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          fileRef.getDownloadURL().subscribe(url => {
+            // Para subtítulos, guardamos directamente sin procesamiento adicional
+            if (fileType === 'subtitles') {
+              const fileData: FileData = {
+                fileName: file.name,
+                fileUrl: url,
+                fileType: 'subtitles',
+                size: file.size
+              };
+
+              // Guardar en Firestore
+              this.firestore.collection('files').add(fileData).then(() => {
+                console.log('Subtítulos guardados correctamente');
+                this.uploadSuccess = true;
+                setTimeout(() => this.uploadSuccess = false, 3000);
+              }).catch(error => {
+                console.error('Error al guardar los subtítulos:', error);
+              });
+            } else {
+              // Validations for audio files
+              if (fileType === 'audio') {
+                const requiredAudioTypes = ['transition1', 'transition2', 'transition3'];
+                const missingTypes = requiredAudioTypes.filter(type => this.audioFiles[type].length === 0);
 
         if (this.audioFiles[this.audioType].length > 0) {
           alert(`You must delete the existing audio file for ${this.audioType} before uploading a new one.`);
@@ -170,41 +214,35 @@ export class FileUploadComponent implements OnInit {
         }
       }
 
-      const filePath = `${fileType}/${new Date().getTime()}_${file.name}`;
-      const fileRef = this.storage.ref(filePath);
-      const task = this.storage.upload(filePath, file);
-
-      task.snapshotChanges().pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe(url => {
-            if (fileType === 'image' || fileType === 'video') {
-              const fileReader = new FileReader();
-              fileReader.onload = (e: any) => {
-                if (fileType === 'image') {
-                  const img = new Image();
-                  img.onload = () => {
-                    const width = img.width;
-                    const height = img.height;
-                    this.saveFileData(file, fileType, url, file.size, width, height);
-                  };
-                  img.src = e.target.result;
-                } else if (fileType === 'video') {
-                  const video = document.createElement('video');
-                  video.onloadedmetadata = () => {
-                    const width = video.videoWidth;
-                    const height = video.videoHeight;
-                    const duration = video.duration;
-                    this.saveFileData(file, fileType, url, file.size, width, height, duration);
-                  };
-                  video.src = URL.createObjectURL(file);
-                }
-              };
-              fileReader.readAsDataURL(file);
-            } else {
-              this.saveFileData(file, fileType, url, file.size);
+              if (fileType === 'image' || fileType === 'video') {
+                const fileReader = new FileReader();
+                fileReader.onload = (e: any) => {
+                  if (fileType === 'image') {
+                    const img = new Image();
+                    img.onload = () => {
+                      const width = img.width;
+                      const height = img.height;
+                      this.saveFileData(file, fileType, url, file.size, width, height);
+                    };
+                    img.src = e.target.result;
+                  } else if (fileType === 'video') {
+                    const video = document.createElement('video');
+                    video.onloadedmetadata = () => {
+                      const width = video.videoWidth;
+                      const height = video.videoHeight;
+                      const duration = video.duration;
+                      this.saveFileData(file, fileType, url, file.size, width, height, duration);
+                    };
+                    video.src = URL.createObjectURL(file);
+                  }
+                };
+                fileReader.readAsDataURL(file);
+              } else {
+                this.saveFileData(file, fileType, url, file.size);
+              }
+              this.uploadSuccess = true;
+              setTimeout(() => this.uploadSuccess = false, 3000);
             }
-            this.uploadSuccess = true;
-            setTimeout(() => this.uploadSuccess = false, 3000);
           });
         })
       ).subscribe();
@@ -292,5 +330,46 @@ export class FileUploadComponent implements OnInit {
 
   getSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  loadSubtitles(): void {
+    this.firestore.collection('files')
+      .ref.where('fileType', '==', 'subtitles')
+      .get()
+      .then(snapshot => {
+        this.subtitles = snapshot.docs.map(doc => {
+          const data = doc.data() as FileData;
+          return {
+            ...data,
+            safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(data.fileUrl)
+          };
+        });
+      });
+  }
+
+  loadEstilos(): void {
+    this.firestore
+      .collection('configuracion')
+      .doc('estilos')
+      .valueChanges()
+      .subscribe((data: any) => {
+        if (data) {
+          this.estilos = data;
+          this.aplicarEstilos(data);
+        }
+      });
+  }
+
+  private aplicarEstilos(estilos: any): void {
+    const root = document.documentElement;
+    root.style.setProperty('--color-fondo', estilos.colorFondo);
+    root.style.setProperty('--color-texto', estilos.colorTexto);
+    root.style.setProperty('--color-primario', estilos.colorPrimario);
+    root.style.setProperty('--color-secundario', estilos.colorSecundario);
+    root.style.setProperty('--tamano-titulo', `${estilos.tamanoTitulo}em`);
+    root.style.setProperty('--tamano-subtitulo', `${estilos.tamanoSubtitulo}em`);
+    root.style.setProperty('--tamano-parrafo', `${estilos.tamanoParrafo}em`);
+    root.style.setProperty('--fuente-principal', estilos.fuentePrincipal || 'Arial, sans-serif');
+    root.style.setProperty('--fuente-secundaria', estilos.fuenteSecundaria || 'Georgia, serif');
   }
 }

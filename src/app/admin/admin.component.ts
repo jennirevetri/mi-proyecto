@@ -14,7 +14,7 @@ import { LandingPageComponent } from '../landing-page/landing-page.component';
   styleUrls: ['./admin.component.css'],
   standalone: true,
   imports :[HeaderAdminComponent,ReactiveFormsModule]
-  
+
 })
 export class AdminComponent implements OnInit {
   estilosForm: FormGroup;
@@ -51,7 +51,17 @@ export class AdminComponent implements OnInit {
     private firestore: AngularFirestore,
     private storage: AngularFireStorage
   ) {
-    this.estilosForm = this.fb.group(this.defaultEstilos);
+    this.estilosForm = this.fb.group({
+      colorFondo: [this.defaultEstilos.colorFondo],
+      colorTexto: [this.defaultEstilos.colorTexto],
+      colorPrimario: [this.defaultEstilos.colorPrimario],
+      colorSecundario: [this.defaultEstilos.colorSecundario],
+      tamanoTitulo: [this.defaultEstilos.tamanoTitulo],
+      tamanoSubtitulo: [this.defaultEstilos.tamanoSubtitulo],
+      tamanoParrafo: [this.defaultEstilos.tamanoParrafo],
+      fuentePrincipal: [this.defaultEstilos.fuentePrincipal],
+      fuenteSecundaria: [this.defaultEstilos.fuenteSecundaria]
+    });
   }
 
   ngOnInit(): void {
@@ -95,8 +105,8 @@ export class AdminComponent implements OnInit {
   aplicarEstilos(estilos: any): void {
     document.documentElement.style.setProperty('--color-fondo', estilos.colorFondo);
     document.documentElement.style.setProperty('--color-texto', estilos.colorTexto);
-    document.documentElement.style.setProperty('--color-primario', estilos.colorPrimario); // Cambiado a colorPrimario
-    document.documentElement.style.setProperty('--color-secundario', estilos.colorSecundario); // Cambiado a colorSecundario
+    document.documentElement.style.setProperty('--color-titulo', estilos.colorTitulo);
+    document.documentElement.style.setProperty('--color-subtitulo', estilos.colorSubtitulo);
     document.documentElement.style.setProperty('--tamano-titulo', estilos.tamanoTitulo + 'em');
     document.documentElement.style.setProperty('--tamano-subtitulo', estilos.tamanoSubtitulo + 'em');
     document.documentElement.style.setProperty('--tamano-parrafo', estilos.tamanoParrafo + 'em');
@@ -105,15 +115,6 @@ export class AdminComponent implements OnInit {
     document.body.style.backgroundColor = estilos.colorFondo;
     // Aplicar el color de texto al cuerpo
     document.body.style.color = estilos.colorTexto;
-    
-    
-
-    if (estilos.fuentePrincipal) {
-      document.documentElement.style.setProperty('--fuente-principal', `url(${estilos.fuentePrincipal})`);
-    }
-    if (estilos.fuenteSecundaria) {
-      document.documentElement.style.setProperty('--fuente-secundaria', `url(${estilos.fuenteSecundaria})`);
-    }
   }
 
   restablecerPredeterminado(): void {
@@ -128,9 +129,6 @@ export class AdminComponent implements OnInit {
       const fileRef = this.storage.ref(filePath);
       this.storage.upload(filePath, archivo).then(() => {
         fileRef.getDownloadURL().subscribe((url) => {
-          // Almacenar la URL en el formulario
-          this.estilosForm.patchValue({ [campo]: url });
-          this.guardarEstilos();
           document.documentElement.style.setProperty(`--${campo}`, `url(${url})`);
         });
       });

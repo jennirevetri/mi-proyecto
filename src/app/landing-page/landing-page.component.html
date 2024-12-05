@@ -48,9 +48,15 @@
     <div *ngIf="videos.length > 0">
 
       <div *ngFor="let video of videos">
+<<<<<<< HEAD
         <video controls>
           <source [src]="video.fileUrl" type="video/mp4">
           <track *ngFor="let subtitle of subtitles" [src]="subtitle.fileUrl" kind="subtitles" srclang="en" label="English">
+=======
+        <video controls crossorigin="anonymous">
+          <source [src]="video.fileUrl" type="video/mp4" crossorigin="anonymous">
+          <track *ngFor="let subtitle of subtitles" [src]="subtitle.safeUrl" kind="subtitles" srclang="en" label="English">
+>>>>>>> changes
           Tu navegador no soporta el elemento de video.
         </video>
       </div>
