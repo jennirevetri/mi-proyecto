@@ -13,8 +13,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            
-            
+
+
             "outputPath": "dist/mi-proyecto",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -29,7 +29,9 @@
             "styles": [
               "src/styles.css",
               "node_modules/bulma/css/bulma.css",
-              "node_modules/leaflet/dist/leaflet.css"
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/quill/dist/quill.bubble.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
