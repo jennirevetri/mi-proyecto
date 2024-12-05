@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HeaderAdminComponent } from '../header-admin/header-admin.component';
 
 interface FileData {
   fileName: string;
@@ -24,7 +25,7 @@ interface FileData {
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, QuillModule]
+  imports: [CommonModule, FormsModule, QuillModule, HeaderAdminComponent]
 })
 export class FileUploadComponent implements OnInit {
   fileType: string = 'audio';

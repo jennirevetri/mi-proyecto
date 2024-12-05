@@ -9,6 +9,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { TerminosComponent } from './terminos/terminos.component'; 
+import { HeaderAdminComponent } from './header-admin/header-admin.component';
 
 // Definir las rutas
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'profile', component: ProfileComponent }, // Ruta para la página de perfil
   { path: 'file-upload', component: FileUploadComponent },
+  { path: 'header-admin', component: HeaderAdminComponent},
   { path: 'terminos', component: TerminosComponent}
 
 ];

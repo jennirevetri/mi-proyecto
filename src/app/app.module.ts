@@ -25,13 +25,14 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';  // Para aute
 import { environment } from '../environments/environment';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; 
 import { AdminComponent } from './admin/admin.component';  // Tu configuración de Firebase
+import { HeaderAdminComponent } from './header-admin/header-admin.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,   // Declara el LoginComponent aquí
     ProfileComponent,
-    AdminComponent ,
+    
     
     
 
@@ -56,6 +57,8 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     AngularFireStorageModule,
     CKEditorModule,
     TerminosComponent,
+    AdminComponent ,
+    HeaderAdminComponent,
     QuillModule.forRoot({
       modules: {
         toolbar: [

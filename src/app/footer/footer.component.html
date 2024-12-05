@@ -22,8 +22,10 @@
           <ul>
             
             <li><a href="#">Contacto</a></li>
-            <li *ngFor="let file of pdfFiles">
-              <a [href]="file.fileUrl" target="_blank">Manual de Usuario</a>
+            <li >
+              <a  (click)="goToTerminos()">
+                Terminos y Condiciones
+            </a>
             </li>
             
           </ul>
@@ -39,7 +41,7 @@
           <p class="has-text-weight-bold">Repositorio</p>
           <ul>
             
-            <li><a href="#"><i class="fab fa-facebook"></i> Github</a></li>
+            <li><a href="https://github.com/jennirevetri/mi-proyecto"><i class="fab fa-facebook"></i> Github</a></li>
            
           </ul>
         </div>

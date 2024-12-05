@@ -58,7 +58,7 @@ justify-content: space-between;
 align-items: center;
 margin-bottom: 10px;
 padding: 10px;
-background-color: #f5f5f5;
+background-color: var(--color-texto);
 border-radius: 4px;
 }
 

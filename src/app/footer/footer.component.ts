@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FileService, FileData } from '../file.service'; 
 import { TangramComponent } from '../tangram/tangram.component'; // Importa el servicio
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-footer',
@@ -10,17 +12,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [TangramComponent, CommonModule]
 })
-export class FooterComponent implements OnInit {
-  pdfFiles: FileData[] = [];
+export class FooterComponent {
+  constructor(private router: Router) {}
 
-  constructor(private fileService: FileService) {}
-
-  ngOnInit(): void {
-    this.fileService.getFilesByType('pdf').subscribe(files => {
-      console.log(files);  // Para asegurarte de que los archivos pdf también se están cargando
-      this.pdfFiles = files;
-    });
+  
+  goToTerminos() {
+    this.router.navigate(['/terminos']);
   }
-
-
 }

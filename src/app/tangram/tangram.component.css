@@ -48,7 +48,7 @@
 /* Default */
 [class*="de-"].tr-bottom{
 	/* Cambias el color de las figuras */
-	border-top: 100px solid #515151;
+	border-top: 100px solid var(--color-primario);
 	transform: 
 		rotateZ(-90deg)
 		translateZ(-1.3px)
@@ -56,7 +56,7 @@
 }
 [class*="de-"].tr-top{
 	/* Cambias el color de las figuras */
-	border-top: 100px solid #515151;
+	border-top: 100px solid var(--color-primario);
 	transform: rotateZ(-90deg)
 	translateZ(2.75px)
 	;
