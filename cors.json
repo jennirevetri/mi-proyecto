@@ -1,9 +1,8 @@
 [
     {
-      "origin": ["https://localhost:4200"],
-      "method": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
+      "origin": ["*"],
+      "method": ["GET"],
       "maxAgeSeconds": 3600,
-      "responseHeader": ["Content-Type", "Authorization"]
+      "responseHeader": ["Content-Type", "Access-Control-Allow-Origin"]
     }
   ]
-  

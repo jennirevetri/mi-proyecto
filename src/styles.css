@@ -2,56 +2,486 @@
 @import '~quill/dist/quill.snow.css';
 
 :root {
-  --color-fondo: #ffffff;
-  --color-texto: #000000;
-  --color-titulo: #333333;
-  --color-subtitulo: #555555;
+  --color-fondo: #333333;
+  --color-texto: #dbdbdb;
+  --color-primario: #00b1d2;
+  --color-secundario: #7a7a7a;
   --tamano-titulo: 2em;
   --tamano-subtitulo: 1.5em;
   --tamano-parrafo: 1em;
+  --fuente-principal: 'Arial', sans-serif;
+  --fuente-secundaria: 'Georgia', serif;
 }
 
-body {
+/* Aplicar estilos base a todos los elementos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos globales para el cuerpo y html */
+html, body {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto) !important;
+  font-family: var(--fuente-secundaria) !important;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Asegurar que todos los elementos hereden los colores base */
+*, *::before, *::after {
+  background-color: inherit;
+  color: inherit;
+}
+
+/* Estilos para todos los elementos de texto */
+h1, h2, h3, h4, h5, h6,
+label, a, p, li, span,
+button, input, select, textarea,
+div, section, article, aside,
+header, footer, nav {
+  color: var(--color-texto) !important;
+  font-family: var(--fuente-secundaria) !important;
+}
+
+/* Estilos más específicos para botones */
+button,
+.btn,
+.button,
+input[type="submit"],
+input[type="button"],
+[class*="btn"],
+.mat-button,
+.mat-raised-button,
+.mat-flat-button,
+.mat-stroked-button,
+.mat-button-base,
+button[type="submit"],
+button[type="button"],
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-success {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+/* Estilos específicos para botones en componentes */
+app-login button,
+app-admin button,
+app-file-upload button,
+.login-button,
+.admin-button,
+.upload-button,
+.delete-button,
+.save-button,
+.reset-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+}
+
+/* Sobrescribir estilos de Angular Material de manera más específica */
+:host ::ng-deep .mat-button,
+:host ::ng-deep .mat-raised-button,
+:host ::ng-deep .mat-flat-button,
+:host ::ng-deep .mat-stroked-button,
+:host ::ng-deep .mat-button-base,
+:host ::ng-deep .mat-button-wrapper {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+}
+
+/* Asegurar que los botones dentro de formularios también se estilicen */
+form button,
+.form button,
+[class*="form"] button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+}
+
+/* Estilos para botones de acciones específicas */
+button[type="submit"],
+[class*="submit"],
+[class*="save"],
+[class*="login"],
+[class*="upload"],
+[class*="delete"] {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+}
+
+/* Mantener el estilo en estados hover/focus */
+button:hover,
+.btn:hover,
+button:focus,
+.btn:focus {
+  background-color: var(--color-primario) !important;
+  opacity: 0.8;
+}
+
+/* Estilos para inputs */
+input,
+select,
+textarea {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto) !important;
+  border: 1px solid var(--color-secundario) !important;
+}
+
+/* Estilos para enlaces */
+a,
+a:visited,
+[href],
+.link {
+  color: var(--color-texto) !important;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+a:hover,
+[href]:hover,
+.link:hover {
+  opacity: 0.8;
+}
+
+/* Clases utilitarias con mayor especificidad */
+.primary-text,
+[class*="primary-text"] {
+  color: var(--color-primario) !important;
+}
+
+.secondary-text,
+[class*="secondary-text"] {
+  color: var(--color-secundario) !important;
+}
+
+.primary-bg,
+[class*="primary-bg"] {
+  background-color: var(--color-primario) !important;
+}
+
+.secondary-bg,
+[class*="secondary-bg"] {
+  background-color: var(--color-secundario) !important;
+}
+
+/* Estilos para contenedores */
+.card,
+.container,
+.panel,
+.mat-card,
+.box,
+[class*="container"],
+[class*="wrapper"] {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto) !important;
+  border-color: var(--color-secundario) !important;
+}
+
+/* Sobrescribir estilos de Angular Material si se está usando */
+.mat-toolbar,
+.mat-drawer,
+.mat-dialog-container,
+.mat-select-panel,
+.mat-menu-panel {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto) !important;
+}
+
+/* Estilos para el footer */
+footer {
+  background-color: var(--color-fondo) !important;
+  border-color: var(--color-secundario) !important;
+  color: var(--color-texto) !important;
+}
+
+/* Sobrescribir cualquier estilo de terceros */
+[class] {
   background-color: var(--color-fondo);
   color: var(--color-texto);
 }
-h1 {
-  color: var(--color-titulo);
-  font-size: var(--tamano-titulo);
-}
-h2 {
-  color: var(--color-subtitulo);
-  font-size: var(--tamano-subtitulo);
-}
-p,a {
-  font-size: var(--tamano-parrafo);
+
+/* Sobrescribir estilos de Angular Material */
+.mat-button,
+.mat-raised-button,
+.mat-flat-button,
+.mat-stroked-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
 }
 
-  body {
-    font-family: var(--font-family-main);
-    background-color: var(--neutral-color-dark);
-    color: var(--neutral-color-dark);
-  }
-  
- 
-  
-  .button.is-primary {
-    background-color: var(--color-subtitulo);
-    color: var(--secondary-color);
-  }
-  
-  .input {
-    border: 1px solid var(--neutral-color-dark);
-  }
-
-  /* login.component.css */
-.box {
-    padding: 20px; /* Espaciado interno para el contenedor */
-    border-radius: 8px; /* Bordes redondeados */
-  }
-
-.custom-link {
-    color: var(--secondary-color); /* Reemplaza con el color que desees, usando el color secundario de Bulma */
+/* Para asegurar que los enlaces dentro de botones mantengan el color correcto */
+button a,
+.btn a,
+.button a,
+[class*="btn"] a {
+  color: inherit !important;
 }
-  
-  
+
+/* Estilos específicos para tablas */
+table,
+.mat-table,
+[class*="table"] {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto) !important;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Estilos para filas y celdas de tabla */
+tr,
+th,
+td,
+.mat-header-cell,
+.mat-cell,
+.mat-footer-cell {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto) !important;
+  border-color: var(--color-secundario) !important;
+}
+
+/* Hover en filas de tabla */
+tr:hover {
+  background-color: rgba(var(--color-primario), 0.1) !important;
+}
+
+/* Estilos para el encabezado de la tabla */
+thead tr,
+.mat-header-row,
+th,
+.mat-header-cell {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  font-weight: bold;
+}
+
+/* Bordes de tabla */
+table,
+th,
+td {
+  border: 1px solid var(--color-secundario) !important;
+}
+
+/* Padding para celdas */
+th,
+td {
+  padding: 8px !important;
+}
+
+/* Asegurar que el fondo se aplique correctamente */
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: var(--color-fondo) !important;
+}
+
+/* Estilos específicos para botones de admin */
+.save-button,
+.reset-button,
+[class*="save-"],
+[class*="reset-"] {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.reset-button,
+[class*="reset-"] {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.save-button:hover,
+.reset-button:hover,
+[class*="save-"]:hover,
+[class*="reset-"]:hover {
+  opacity: 0.8;
+}
+
+/* Asegurar que los botones en el componente admin tengan estos estilos */
+app-admin button {
+  border-radius: 4px !important;
+  margin: 5px !important;
+  padding: 10px 20px !important;
+}
+
+/* Estilos específicos para botones de admin con mayor especificidad */
+form button.save-button,
+.save-button,
+button[type="submit"].save-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+  transition: opacity 0.3s ease !important;
+}
+
+form button.reset-button,
+.reset-button,
+button[type="button"].reset-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+  transition: opacity 0.3s ease !important;
+}
+
+/* Sobrescribir estilos de frameworks */
+.button.is-light,
+.button.is-primary,
+.mat-button-base {
+  background: none !important;
+  border: none !important;
+}
+
+/* Estilos específicos para botones con mayor especificidad */
+button.save-button,
+.control button.save-button,
+form button.save-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+}
+
+button.reset-button,
+.control button.reset-button,
+form button.reset-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+  transition: opacity 0.3s ease !important;
+}
+
+button.login-button,
+.control button.login-button,
+form button.login-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+}
+
+/* Remover estilos de Bulma y otros frameworks */
+.button.is-primary,
+.button.is-warning,
+.button.is-light,
+.mat-button-base {
+  background: none !important;
+  border: none !important;
+}
+
+/* Estilos globales para botones */
+.login-button,
+.upload-button,
+.save-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+}
+
+.delete-button {
+  background-color: var(--color-secundario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  cursor: pointer !important;
+}
+
+/* Efecto hover para todos los botones */
+.login-button:hover,
+.upload-button:hover,
+.save-button:hover,
+.delete-button:hover {
+  opacity: 0.8;
+}
+
+/* Estilos para los botones de selección de archivo */
+.file-cta,
+.file-label,
+.file.is-info .file-cta,
+.file.is-small .file-cta,
+.file.is-info .file-cta span,
+.file-label span,
+.file-cta span,
+.file-label .file-icon,
+button.file-cta,
+label.file-label,
+.file input[type="file"] ~ .file-cta {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  cursor: pointer !important;
+}
+
+/* Hover para los botones de archivo */
+.file-cta:hover,
+.file-label:hover,
+.upload-button:hover,
+.delete-button:hover,
+.save-button:hover,
+.button.is-info:hover,
+.button.is-danger:hover,
+.button.is-primary:hover {
+  opacity: 0.8;
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto) !important;
+}
+
+/* Asegurar que el texto dentro del botón tenga el color correcto */
+.file-cta *,
+.file-label *,
+.upload-button *,
+.delete-button *,
+.save-button *,
+button.is-info *,
+button.is-danger *,
+button.is-primary * {
+  color: var(--color-texto) !important;
+}
+
+/* Sobrescribir estilos de Bulma específicamente */
+.file.is-info .file-cta,
+.button.is-info,
+.button.is-primary,
+.button.is-danger {
+  background-color: var(--color-primario) !important;
+  border-color: transparent !important;
+}

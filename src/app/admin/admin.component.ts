@@ -14,20 +14,22 @@ export class AdminComponent implements OnInit {
   nombreArchivoFuenteSecundaria: string | null = null; // Para almacenar el nombre del archivo seleccionado
 
   defaultEstilos = {
-    colorFondo: '#ffffff',
-    colorTexto: '#000000',
-    colorTitulo: '#333333',
-    colorSubtitulo: '#555555',
+    colorFondo: '#333333',
+    colorTexto: '#dbdbdb',
+    colorPrimario: '#00b1d2',  // Cambiado a colorPrimario
+    colorSecundario: '#7a7a7a', // Cambiado a colorSecundario
     tamanoTitulo: 2,
     tamanoSubtitulo: 1.5,
     tamanoParrafo: 1,
+    fuentePrincipal: '',
+    fuenteSecundaria: '',
   };
-  
+
   colorCampos = [
     { label: 'Color de Fondo', nombre: 'colorFondo' },
     { label: 'Color de Texto', nombre: 'colorTexto' },
-    { label: 'Color de Título', nombre: 'colorTitulo' },
-    { label: 'Color de Subtítulo', nombre: 'colorSubtitulo' },
+    { label: 'Color Primario', nombre: 'colorPrimario' },  // Cambiado a colorPrimario
+    { label: 'Color Secundario', nombre: 'colorSecundario' },  // Cambiado a colorSecundario
   ];
 
   tamanoCampos = [
@@ -41,7 +43,17 @@ export class AdminComponent implements OnInit {
     private firestore: AngularFirestore,
     private storage: AngularFireStorage
   ) {
-    this.estilosForm = this.fb.group(this.defaultEstilos);
+    this.estilosForm = this.fb.group({
+      colorFondo: [this.defaultEstilos.colorFondo],
+      colorTexto: [this.defaultEstilos.colorTexto],
+      colorPrimario: [this.defaultEstilos.colorPrimario],
+      colorSecundario: [this.defaultEstilos.colorSecundario],
+      tamanoTitulo: [this.defaultEstilos.tamanoTitulo],
+      tamanoSubtitulo: [this.defaultEstilos.tamanoSubtitulo],
+      tamanoParrafo: [this.defaultEstilos.tamanoParrafo],
+      fuentePrincipal: [this.defaultEstilos.fuentePrincipal],
+      fuenteSecundaria: [this.defaultEstilos.fuenteSecundaria]
+    });
   }
 
   ngOnInit(): void {
@@ -85,16 +97,18 @@ export class AdminComponent implements OnInit {
   aplicarEstilos(estilos: any): void {
     document.documentElement.style.setProperty('--color-fondo', estilos.colorFondo);
     document.documentElement.style.setProperty('--color-texto', estilos.colorTexto);
-    document.documentElement.style.setProperty('--color-titulo', estilos.colorTitulo);
-    document.documentElement.style.setProperty('--color-subtitulo', estilos.colorSubtitulo);
+    document.documentElement.style.setProperty('--color-primario', estilos.colorPrimario);
+    document.documentElement.style.setProperty('--color-secundario', estilos.colorSecundario);
     document.documentElement.style.setProperty('--tamano-titulo', estilos.tamanoTitulo + 'em');
     document.documentElement.style.setProperty('--tamano-subtitulo', estilos.tamanoSubtitulo + 'em');
     document.documentElement.style.setProperty('--tamano-parrafo', estilos.tamanoParrafo + 'em');
 
-    // Aplicar el color de fondo al documento
-    document.body.style.backgroundColor = estilos.colorFondo;
-    // Aplicar el color de texto al cuerpo
-    document.body.style.color = estilos.colorTexto;
+    if (estilos.fuentePrincipal) {
+      document.documentElement.style.setProperty('--fuente-principal', estilos.fuentePrincipal);
+    }
+    if (estilos.fuenteSecundaria) {
+      document.documentElement.style.setProperty('--fuente-secundaria', estilos.fuenteSecundaria);
+    }
   }
 
   restablecerPredeterminado(): void {
@@ -109,7 +123,10 @@ export class AdminComponent implements OnInit {
       const fileRef = this.storage.ref(filePath);
       this.storage.upload(filePath, archivo).then(() => {
         fileRef.getDownloadURL().subscribe((url) => {
-          document.documentElement.style.setProperty(`--${campo}`, `url(${url})`);
+          // Almacenar la URL en el formulario
+          this.estilosForm.patchValue({ [campo]: url });
+          this.guardarEstilos();
+          document.documentElement.style.setProperty(`--${campo}`, `url('${url}')`);
         });
       });
 
