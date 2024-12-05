@@ -16,6 +16,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { TerminosComponent } from './terminos/terminos.component';
 
 
 // Firebase Modules
@@ -54,6 +55,7 @@ import { AdminComponent } from './admin/admin.component';  // Tu configuración 
     FileUploadComponent,
     AngularFireStorageModule,
     CKEditorModule,
+    TerminosComponent,
     QuillModule.forRoot({
       modules: {
         toolbar: [

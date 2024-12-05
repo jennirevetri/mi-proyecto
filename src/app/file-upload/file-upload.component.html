@@ -39,11 +39,11 @@
       <div class="field">
         <div class="file is-info">
           <label class="file-label">
-            <input 
-              class="file-input" 
-              type="file" 
-              id="fileInput" 
-              (change)="handleFileUpload($event)" 
+            <input
+              class="file-input"
+              type="file"
+              id="fileInput"
+              (change)="handleFileUpload($event)"
               [multiple]="fileType !== 'wysiwyg' && fileType !== 'subtitles'">
             <span class="file-cta">
               <span class="file-icon">
@@ -58,8 +58,8 @@
       <!-- Editor WYSIWYG -->
       <div class="field" *ngIf="fileType === 'wysiwyg'">
         <label class="label">Términos y Condiciones</label>
-        <quill-editor 
-          [(ngModel)]="editorContent" 
+        <quill-editor
+          [(ngModel)]="editorContent"
           [modules]="editorConfig"
           [styles]="{ height: '200px' }">
         </quill-editor>
@@ -125,7 +125,7 @@
               <td>{{ image.size }} bytes</td>
               <td>{{ image.width }}px</td>
               <td>{{ image.height }}px</td>
-              
+
               <td>
                 <button class="button is-danger is-small" (click)="removeFile(image, 'image')">Eliminar</button>
               </td>
@@ -175,26 +175,21 @@
       <!-- Vista previa para PDFs -->
       <div *ngIf="fileType === 'pdf'">
         <h3 class="subtitle is-5">Archivos PDF Seleccionados</h3>
-        <table class="table is-fullwidth">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Enlace</th>
-              <th>Tamaño</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let pdf of pdfFiles">
-              <td>{{ pdf.fileName }}</td>
-              <td><a [href]="pdf.fileUrl" target="_blank">Ver PDF</a></td>
-              <td>{{ pdf.size }} bytes</td>
-              <td>
-                <button class="button is-danger is-small" (click)="removeFile(pdf, 'pdf')">Eliminar</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div *ngFor="let file of pdfFiles" class="pdf-container">
+          <div class="file-info">
+            <div class="file-details">
+              <span class="file-name">{{ file.fileName }}</span>
+              <span class="file-size">{{ file.size }} bytes</span>
+            </div>
+            <button class="button is-danger is-small" (click)="removeFile(file, 'pdf')">
+              Eliminar
+            </button>
+          </div>
+          <embed
+            [src]="getSafeUrl(file.fileUrl)"
+            type="application/pdf"
+          />
+        </div>
       </div>
 
       <!-- Vista previa para subtítulos -->

@@ -25,6 +25,7 @@
     "bulma": "^1.0.2",
     "firebase": "^10.14.1",
     "leaflet": "^1.9.4",
+    "libphonenumber-js": "^1.11.16",
     "ngx-quill": "^26.0.0",
     "quill": "^2.0.2",
     "rxjs": "~7.8.0",

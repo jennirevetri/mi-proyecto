@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { TerminosComponent } from './terminos/terminos.component'; 
 
 // Definir las rutas
 const routes: Routes = [
@@ -16,7 +17,9 @@ const routes: Routes = [
   { path: 'admin', component: AdminComponent},
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'profile', component: ProfileComponent }, // Ruta para la página de perfil
-  { path: 'file-upload', component: FileUploadComponent }
+  { path: 'file-upload', component: FileUploadComponent },
+  { path: 'terminos', component: TerminosComponent}
+
 ];
 
 @NgModule({

@@ -9,13 +9,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css'],
   standalone: true,
-  imports: [CommonModule,HeaderComponent,FooterComponent]
-  
+  imports: [CommonModule, HeaderComponent, FooterComponent]
 })
 export class LandingPageComponent implements OnInit {
   images: FileData[] = [];
   videos: FileData[] = [];
-  currentIndex: number = 0;
+  currentIndex: number = 3;
 
   constructor(private fileService: FileService) {}
 
@@ -33,21 +32,14 @@ export class LandingPageComponent implements OnInit {
     });
   }
   
+  
 
-  // Lógica para el carrusel
-  next(): void {
-    if (this.currentIndex < this.images.length - 1) {
-      this.currentIndex++;
-    } else {
-      this.currentIndex = 0; // Reinicia el carrusel
-    }
+  
+  prev() {
+    this.currentIndex = (this.currentIndex === 0) ? this.images.length - 1 : this.currentIndex - 1;
   }
 
-  prev(): void {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-    } else {
-      this.currentIndex = this.images.length - 1; // Vuelve al último
-    }
+  next() {
+    this.currentIndex = (this.currentIndex === this.images.length - 1) ? 0 : this.currentIndex + 1;
   }
 }

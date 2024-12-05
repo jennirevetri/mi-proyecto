@@ -36,7 +36,7 @@ p,a {
  
   
   .button.is-primary {
-    background-color: var(--primary-color);
+    background-color: var(--color-subtitulo);
     color: var(--secondary-color);
   }
   

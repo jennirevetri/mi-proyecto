@@ -1,47 +1,104 @@
 .container {
-    margin-top: 20px;
-  }
-  
-  .preview, .form-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .file-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  
-  
-  
+  margin-top: 20px;
+}
 
-  
-  .container {
-    margin-top: 20px;
-  }
-  
-  quill-editor {
-    height: 300px;
-    width: 300px;
-    background-color: white;
-  }
-  
-  
-  /* Asegúrate de que el contenedor del editor tenga altura y ancho adecuados */
+.preview, .form-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+.container {
+  margin-top: 20px;
+}
+
+quill-editor {
+  height: 300px;
+  width: 300px;
+  background-color: white;
+}
+
+
+/* Asegúrate de que el contenedor del editor tenga altura y ancho adecuados */
 /* Puedes personalizar el estilo del editor aquí */
 .ql-toolbar.ql-snow {
-  border: 1px solid #dbdbdb; /* Color del borde de Bulma */
+border: 1px solid #dbdbdb; /* Color del borde de Bulma */
 }
 
 .ql-container.ql-snow {
-  border: 1px solid #dbdbdb; /* Color del borde de Bulma */
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fuente de Bulma */
+border: 1px solid #dbdbdb; /* Color del borde de Bulma */
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fuente de Bulma */
 }
 
 .thumbnail {
-  width: 400px; /* Ancho de la miniatura */
-   /* Altura máxima de la miniatura */
+width: 400px; /* Ancho de la miniatura */
+ /* Altura máxima de la miniatura */
+}
+
+.pdf-container {
+margin: 20px 0;
+width: 100%;
+max-width: 1200px; /* Aumentado de 800px a 1200px */
+}
+
+.file-info {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+padding: 10px;
+background-color: #f5f5f5;
+border-radius: 4px;
+}
+
+.file-name {
+font-size: 1rem;
+font-weight: 500;
+color: #363636;
+/* Para nombres largos */
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+max-width: 400px;
+}
+
+.file-details {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+embed {
+width: 100%;
+height: 800px;
+border: 1px solid #ddd;
+border-radius: 4px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Para hacer el contenedor responsivo */
+@media (max-width: 768px) {
+.pdf-container {
+  max-width: 100%;
+  padding: 0 10px;
+}
+
+.file-name {
+  max-width: 200px;
+}
+
+embed {
+  height: 500px;
+}
 }

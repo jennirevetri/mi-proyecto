@@ -6,15 +6,28 @@
     <p class="subtitle">Evaluaciones de Interfaces de Usuario.</p>
 
     <!-- Carrusel de imágenes -->
-    <div class="carousel">
-      <div class="carousel-item" *ngFor="let image of images; let i = index" [ngClass]="{'active': i === currentIndex}">
-        <img [src]="image.fileUrl" [alt]="image.fileName" class="image is-fullwidth">
+  
+    <div class="carousel-container">
+      <!-- Carrusel de imágenes -->
+      <div id="carousel" class="carousel">
+        <div *ngFor="let image of images; let i = index" [ngClass]="{'selected': i === currentIndex, 'prev': i === currentIndex - 1, 'next': i === currentIndex + 1}" class="carousel-item">
+          <img [src]="image.fileUrl" [alt]="'Image ' + i">
+        </div>
       </div>
-      <div class="buttons has-addons">
-        <button class="button" (click)="prev()">Anterior</button>
-        <button class="button" (click)="next()">Siguiente</button>
+
+      <!-- Botones -->
+      <div class="carousel-buttons is-flex is-justify-content-center is-align-items-center mt-5">
+
+        <button class="button-82-pushable" role="button" (click)="prev()">
+          <span class="button-82-shadow"></span><span class="button-82-edge"></span><span class="button-82-front text">Anterior</span>
+        </button>
+        <button class="button-82-pushable" role="button" (click)="next()">
+          <span class="button-82-shadow"></span><span class="button-82-edge"></span><span class="button-82-front text">Siguiente</span>
+        </button>
       </div>
     </div>
+
+
 
     <!-- Cards -->
     <div class="columns is-multiline">
@@ -33,10 +46,11 @@
 
     <!-- Video -->
     <div *ngIf="videos.length > 0">
-      <h2 class="title">Video</h2>
+     
       <div *ngFor="let video of videos">
         <video controls>
           <source [src]="video.fileUrl" type="video/mp4">
+          <track src="assets/subtitulos2.vtt" kind="subtitles" srclang="en" label="English" default>
           Tu navegador no soporta el elemento de video.
         </video>
       </div>

@@ -5,13 +5,14 @@ import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface FileData {
   fileName: string;
   fileUrl: string;
   fileType: string;
   audioType?: string;
-  textContent?: string; 
+  textContent?: string;
   size?: number; // tamaño en bytes
   width?: number; // ancho en píxeles (para imágenes y videos)
   height?: number;
@@ -37,7 +38,7 @@ export class FileUploadComponent implements OnInit {
   pdfFiles: FileData[] = [];
   subtitleFiles: FileData[] = [];
   allFiles: FileData[] = [];
-  
+
   editorConfig = {
     theme: 'snow',
     toolbar: [
@@ -54,7 +55,11 @@ export class FileUploadComponent implements OnInit {
     ]
   };
 
-  constructor(private storage: AngularFireStorage, private firestore: AngularFirestore) {}
+  constructor(
+    private storage: AngularFireStorage,
+    private firestore: AngularFirestore,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     this.loadFilesFromFirestore();
@@ -117,57 +122,57 @@ export class FileUploadComponent implements OnInit {
   handleFileUpload(event: any) {
     const file = event.target.files[0];
     const fileType = this.fileType;
-  
+
     if (file) {
       // Validations for audio files
       if (fileType === 'audio') {
         const requiredAudioTypes = ['transition1', 'transition2', 'transition3'];
         const missingTypes = requiredAudioTypes.filter(type => this.audioFiles[type].length === 0);
-        
+
         if (this.audioFiles[this.audioType].length > 0) {
           alert(`You must delete the existing audio file for ${this.audioType} before uploading a new one.`);
           return;
         }
       }
-  
+
       // Validations for subtitle files
       if (fileType === 'subtitles' && this.subtitleFiles.length > 0) {
         alert('You must delete the existing subtitle file before uploading a new one.');
         return;
       }
-  
+
       // Validations for video files
       if (fileType === 'video' && this.videoFiles.length > 0) {
         alert('You must delete the existing video file before uploading a new one.');
         return;
       }
-  
+
       // Validations for PDF files
       if (fileType === 'pdf' && this.pdfFiles.length > 0) {
         alert('You must delete the existing PDF file before uploading a new one.');
         return;
       }
-  
+
       // Validations for WYSIWYG content
       if (fileType === 'wysiwyg' && this.allFiles.some(f => f.fileType === 'wysiwyg')) {
         alert('You must delete the existing WYSIWYG content before uploading a new one.');
         return;
       }
-  
+
       // Validations for image files
       if (fileType === 'image') {
         if (this.imageFiles.length === 0) {
           alert('You must upload at least one image.');
-        } else if (this.imageFiles.length >= 3) {
+        } else if (this.imageFiles.length >= 100) {
           alert('You can upload a maximum of 3 images. Please delete an existing image before uploading a new one.');
           return;
         }
       }
-  
+
       const filePath = `${fileType}/${new Date().getTime()}_${file.name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, file);
-  
+
       task.snapshotChanges().pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe(url => {
@@ -204,7 +209,7 @@ export class FileUploadComponent implements OnInit {
       ).subscribe();
     }
   }
-  
+
   saveFileData(file: any, fileType: string, fileUrl: string, fileSize: number, width?: number, height?: number, duration?: number) {
     // Crear un objeto de datos básico para todos los archivos
     const fileData: FileData = {
@@ -213,19 +218,19 @@ export class FileUploadComponent implements OnInit {
       fileType: fileType,
       size: fileSize,
     };
-  
+
     // Solo agregar estos campos si tienen un valor definido y si son relevantes para el tipo de archivo
     if ((fileType === 'image' || fileType === 'video') && width !== undefined && height !== undefined) {
       // Se agregan width y height tanto para imágenes como para videos
       fileData.width = width;
       fileData.height = height;
     }
-  
+
     if ((fileType === 'audio' || fileType === 'video') && duration !== undefined) {
       // Solo se agrega duration para archivos de tipo audio o video
       fileData.duration = duration;
     }
-  
+
     // Aquí mantenemos la lógica para agregar el archivo a los arrays locales antes de guardarlo en Firestore
     if (fileType === 'audio' && !this.audioFiles[this.audioType].some(f => f.fileName === fileData.fileName)) {
       this.audioFiles[this.audioType].push(fileData);
@@ -240,7 +245,7 @@ export class FileUploadComponent implements OnInit {
     } else if (fileType === 'wysiwyg' && !this.allFiles.some(f => f.fileName === fileData.fileName)) {
       this.allFiles.push(fileData);
     }
-  
+
     // Ahora agregamos el archivo a Firestore
     this.firestore.collection('files').add(fileData).then(() => {
       console.log('Archivo guardado correctamente en Firestore');
@@ -248,8 +253,8 @@ export class FileUploadComponent implements OnInit {
       console.error('Error guardando el archivo en Firestore:', error);
     });
   }
-  
-  
+
+
 
   removeFile(file: FileData, fileType: string, audioType?: string) {
     if (fileType === 'wysiwyg') {
@@ -264,7 +269,7 @@ export class FileUploadComponent implements OnInit {
         this.firestore.collection('files').ref.where('fileName', '==', file.fileName).get().then(snapshot => {
           snapshot.forEach(doc => doc.ref.delete());
         });
-  
+
         if (fileType === 'audio' && audioType) {
           this.audioFiles[audioType] = this.audioFiles[audioType].filter(f => f.fileName !== file.fileName);
         } else if (fileType === 'image') {
@@ -282,5 +287,9 @@ export class FileUploadComponent implements OnInit {
 
   updateFileType(event: any) {
     this.fileType = event.target.value;
+  }
+
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

@@ -18,10 +18,13 @@
           </ul>
         </div>
         <div class="column is-2">
-          <p class="has-text-weight-bold">Nosotros</p>
+          <p class="has-text-weight-bold">Información/<p>
           <ul>
             
             <li><a href="#">Contacto</a></li>
+            <li *ngFor="let file of pdfFiles">
+              <a [href]="file.fileUrl" target="_blank">Manual de Usuario</a>
+            </li>
             
           </ul>
         </div>
